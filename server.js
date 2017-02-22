@@ -8,6 +8,11 @@ session = require('express-session'),
 swig = require('swig'),
 morgan = require('morgan'), 
 util = require('util');
+//Declare the modules here.
+
+//Add PixelPin Strategy here.
+
+//add serialization here
 
 var app = express();
 
@@ -18,6 +23,7 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('method-override')());
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+//add passport initalization here.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -56,6 +62,8 @@ app.get('/logout', function(req,res){
 	req.logout();
 	res.redirect('/');
 });
+
+//Add routes here
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
