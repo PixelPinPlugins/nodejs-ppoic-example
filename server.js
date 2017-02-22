@@ -7,32 +7,7 @@ methodOverride = require('method-override'),
 session = require('express-session'),
 swig = require('swig'),
 morgan = require('morgan'), 
-util = require('util'),
-passport = require('passport'),
-PixelPinStrategy = require('Passport-PixelPin-OpenIDConnect').Strategy;
-
-passport.use(new PixelPinStrategy({
-    clientID: "MSG1BBJCCMMOYB6YZOMKPK4TWESEMU",
-    clientSecret: "xjDmTt2CrNgf*1Rb86-9Ptj0Z6QVlr",
-    responseType: "code",
-    callbackURL: "http://local.nodejs.co.uk/auth/pixelpin/callback"
-},
-
-function(accessToken, refreshToken, profile, done) {
-    process.nextTick(function () {
-            return done(null, profile);
-        });
-    }
-
-));
-
-passport.serializeUser(function(user, done) {
-    done(null, user);
-});
-
-passport.deserializeUser(function(obj, done){
-    done(null, obj);
-});
+util = require('util');
 
 var app = express();
 
@@ -43,8 +18,6 @@ app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('method-override')());
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
@@ -83,19 +56,6 @@ app.get('/logout', function(req,res){
 	req.logout();
 	res.redirect('/');
 });
-
-app.get('/auth/pixelpin',
-    passport.authenticate('pixelpin', {scope: ['profile', 'email', 'phone', 'address']}),
-    function(req, res){
-
-});
-
-app.get('/auth/pixelpin/callback',
-    passport.authenticate('pixelpin', {failureRedirect: 'login'}),
-    function(req, res){
-        res.redirect('/layout');
-});
-
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
